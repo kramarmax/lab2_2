@@ -1,0 +1,51 @@
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+#include <cstring>
+#include <locale>
+
+using namespace std;
+
+int main()
+{
+    setlocale(LC_ALL, "rus");
+    ifstream infile("text.txt");
+    char *str=new char[1024];
+    char *result=new char[512];
+    char *buf=new char[256];
+    memset(result, '\0', 512);
+    memset(buf, '\0', 256);
+    infile.getline(str, 1024);
+    int END_OF_FILE = strlen(str);
+    int q=0, i=0, o=0, j=0;
+    int Begin, End=-1;
+    bool flag=0;
+    while(q<END_OF_FILE)
+    {
+
+        Begin=End+1;
+        if((!isdigit(str[q]) && str[q]!=',') && isdigit(str[q+1]) && isdigit(str[q+2]) && !isdigit(str[q+3]))
+            flag=1;
+        if(str[q]=='?' || str[q]=='!' || str[q]=='.')
+        {
+            End=q;
+            if(!flag)
+            {
+                for(j=Begin, i=0; j<=End; j++, i++)
+                    buf[i]=str[j];
+                strcat(result, buf);
+            }
+            flag=0;
+        }
+
+        memset(buf, '\0', i);
+        q++;
+
+    }
+    cout<<result<<endl<<endl;
+    delete [] str;
+    delete [] result;
+    delete [] buf;
+    infile.close();
+    return 0;
+}
